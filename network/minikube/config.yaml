@@ -1,0 +1,184 @@
+name: "default-svc-cluster-local-network"
+
+version: 2.2.1
+
+client:
+
+  organization: doctor
+
+  logging:
+    level: info
+  
+  cryptoconfig:
+    path: /home/faizan/Documents/GitHub/hyperledger_prac/crypto-config
+
+  credentialStore:
+    path: "/tmp/state-store"
+
+    cryptoStore:
+      path: /tmp/msp
+
+  BCCSP:
+    security:
+      enabled: true
+      default:
+        provider: "SW"
+      hashAlgorithm: "SHA2"
+      softVerify: true
+      level: 256
+  
+  tlsCerts:
+    systemCertPool: true
+
+channels:
+
+  mainchannel:
+
+    peers:
+      peer0-doctor:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+  
+    policies:
+      queryChannelConfig:
+        minResponses: 1
+        maxTargets: 1
+        retryOpts:
+          attempts: 5
+          initialBackoff: 1000ms
+          maxBackoff: 10s
+          backoffFactor: 2.0
+
+organizations:
+  doctor:
+    mspid: doctor
+    cryptopath: peerOrganizations/doctor/users/Admin@doctor/msp
+    peers:
+      - peer0-doctor
+      - peer1-doctor
+  cvh:
+    mspid: cvh
+    cryptopath: peerOrganizations/cvh/users/Admin@cvh/msp
+    peers:
+      - peer0-cvh
+      - peer1-cvh
+
+orderers:
+  _default:
+    grpcOptions:
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+  
+  orderer0:
+    grpcOptions:
+      ssl-target-name-override: orderer0
+      grpc-max-send-message-length: 15
+    
+    tlsCACerts:
+      path: /home/nick/Projects/k8s-hyperledger-fabric-2.2/crypto-config/ordererOrganizations/orderer/msp/tlscacerts/orderers-ca-7054.pem
+
+  
+  orderer1:
+    grpcOptions:
+      ssl-target-name-override: orderer1
+      grpc-max-send-message-length: 15
+    
+    tlsCACerts:
+      path: /home/nick/Projects/k8s-hyperledger-fabric-2.2/crypto-config/ordererOrganizations/orderer/msp/tlscacerts/orderers-ca-7054.pem
+
+  
+  orderer2:
+    grpcOptions:
+      ssl-target-name-override: orderer2
+      grpc-max-send-message-length: 15
+    
+    tlsCACerts:
+      path: /home/nick/Projects/k8s-hyperledger-fabric-2.2/crypto-config/ordererOrganizations/orderer/msp/tlscacerts/orderers-ca-7054.pem
+
+peers:
+
+  _default:
+    grpcOptions:
+      keep-alive-time: 1s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+    
+  peer0-doctor:
+    grpcOptions:
+      ssl-target-name-override: peer0-doctor
+      grpc.http2.keepalive_time: 15
+    
+    tlsCACerts:
+      path: /home/nick/Projects/k8s-hyperledger-fabric-2.2/crypto-config/peerOrganizations/doctor/msp/tlscacerts/doctor-ca-7054.pem
+
+  peer1-doctor:
+    grpcOptions:
+      ssl-target-name-override: peer1-doctor
+      grpc.http2.keepalive_time: 15
+    
+    tlsCACerts:
+      path: /home/nick/Projects/k8s-hyperledger-fabric-2.2/crypto-config/peerOrganizations/doctor/msp/tlscacerts/doctor-ca-7054.pem
+
+    
+  peer0-cvh:
+    grpcOptions:
+      ssl-target-name-override: peer0-cvh
+      grpc.http2.keepalive_time: 15
+    
+    tlsCACerts:
+      path: /home/nick/Projects/k8s-hyperledger-fabric-2.2/crypto-config/peerOrganizations/cvh/msp/tlscacerts/cvh-ca-7054.pem
+
+  peer1-cvh:
+    grpcOptions:
+      ssl-target-name-override: peer1-cvh
+      grpc.http2.keepalive_time: 15
+    
+    tlsCACerts:
+      path: /home/nick/Projects/k8s-hyperledger-fabric-2.2/crypto-config/peerOrganizations/cvh/msp/tlscacerts/cvh-ca-7054.pem
+
+entityMatchers:
+
+  peer:
+    - pattern: (\w*)peer0-doctor(\w*)
+      urlSubstitutionExp: localhost:7051
+      sslTargetOverrideUrlSubstitutionExp: peer0-doctor
+      mappedHost: peer0-doctor
+
+    - pattern: (\w*)peer1-doctor(\w*)
+      urlSubstitutionExp: localhost:8051
+      sslTargetOverrideUrlSubstitutionExp: peer1-doctor
+      mappedHost: peer1-doctor
+
+    - pattern: (\w*)peer0-cvh(\w*)
+      urlSubstitutionExp: localhost:9051
+      sslTargetOverrideUrlSubstitutionExp: peer0-cvh
+      mappedHost: peer0-cvh
+
+    - pattern: (\w*)peer1-cvh(\w*)
+      urlSubstitutionExp: localhost:10051
+      sslTargetOverrideUrlSubstitutionExp: peer1-cvh
+      mappedHost: peer1-cvh
+
+  orderer:
+    - pattern: (\w*)orderer0(\w*)
+      urlSubstitutionExp: localhost:7050
+      sslTargetOverrideUrlSubstitutionExp: orderer0
+      mappedHost: orderer0
+
+    - pattern: (\w*)orderer1(\w*)
+      urlSubstitutionExp: localhost:8050
+      sslTargetOverrideUrlSubstitutionExp: orderer1
+      mappedHost: orderer1
+      
+    - pattern: (\w*)orderer2(\w*)
+      urlSubstitutionExp: localhost:9050
+      sslTargetOverrideUrlSubstitutionExp: orderer2
+      mappedHost: orderer2
+

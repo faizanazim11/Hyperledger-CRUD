@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: peer0-doctor-couchdb
+  labels: {
+    component: peer0,
+    type: couchdb,
+    org: doctor
+  }
+spec:
+  type: ClusterIP
+  selector:
+    component: peer0
+    type: couchdb
+    org: doctor
+  ports:
+    - port: 5984
+      targetPort: 5984
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: peer1-doctor-couchdb
+  labels: {
+    component: peer1,
+    type: couchdb,
+    org: doctor
+  }
+spec:
+  type: ClusterIP
+  selector:
+    component: peer1
+    type: couchdb
+    org: doctor
+  ports:
+    - port: 5984
+      targetPort: 5984
