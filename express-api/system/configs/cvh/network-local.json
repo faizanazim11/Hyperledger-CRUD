@@ -1,0 +1,80 @@
+{
+  "name": "first-network",
+  "version": "1.1",
+  "channels": {
+    "mainchannel": {
+      "orderers": ["orderer0", "orderer1", "orderer2"],
+      "peers": ["peer0-cvh", "peer1-cvh"],
+      "connection": {
+        "timeout": {
+          "peer": {
+            "endorser": "6000",
+            "eventHub": "6000",
+            "eventReg": "6000"
+          }
+        }
+      }
+    }
+  },
+  "organizations": {
+    "cvh": {
+      "mspid": "cvh",
+      "adminPrivateKey": {
+        "path": "../crypto-config/peerOrganizations/cvh/users/Admin@cvh/msp/keystore/pvt-cert.pem"
+      },
+      "peers": ["peer0-cvh", "peer1-cvh"],
+      "signedCert": {
+        "path": "../crypto-config/peerOrganizations/cvh/users/Admin@cvh/msp/signcerts/Admin@cvh-cert.pem"
+      }
+    }
+  },
+  "orderers": {
+    "orderer0": {
+      "url": "grpcs://orderer0:7050",
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer0"
+      },
+      "tlsCACerts": {
+        "path": "../crypto-config/ordererOrganizations/orderer/orderers/orderer0/msp/tlscacerts/tlsca.orderer-cert.pem"
+      }
+    },
+    "orderer1": {
+      "url": "grpcs://orderer1:7050",
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer1"
+      },
+      "tlsCACerts": {
+        "path": "../crypto-config/ordererOrganizations/orderer/orderers/orderer1/msp/tlscacerts/tlsca.orderer-cert.pem"
+      }
+    },
+    "orderer2": {
+      "url": "grpcs://orderer2:7050",
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer2"
+      },
+      "tlsCACerts": {
+        "path": "../crypto-config/ordererOrganizations/orderer/orderers/orderer2/msp/tlscacerts/tlsca.orderer-cert.pem"
+      }
+    }
+  },
+  "peers": {
+    "peer0-cvh": {
+      "url": "grpcs://peer0-cvh:9051",
+      "tlsCACerts": {
+        "path": "../crypto-config/peerOrganizations/cvh/peers/peer0-cvh/tls/ca.crt"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0-cvh"
+      }
+    },
+    "peer1-cvh": {
+      "url": "grpcs://peer1-cvh:10051",
+      "tlsCACerts": {
+        "path": "../crypto-config/peerOrganizations/cvh/peers/peer1-cvh/tls/ca.crt"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1-cvh"
+      }
+    }
+  }
+}

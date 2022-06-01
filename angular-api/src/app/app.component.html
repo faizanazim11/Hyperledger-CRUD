@@ -1,0 +1,22 @@
+<div id="wrapper">
+  <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">Patient Health Record Management System using Blockchain</span>
+    </div>
+  </nav>
+  <div id="main-body">
+    <div id="left-section">
+      <button class="btn btn-success btn-lg m-5" [routerLink]="['/create']"
+        routerLinkActive="router-link-active">Create</button>
+      <button class="btn btn-primary btn-lg m-5" [routerLink]="['/read']"
+        routerLinkActive="router-link-active">Read</button>
+      <button class="btn btn-warning btn-lg m-5" [routerLink]="['/update']"
+        routerLinkActive="router-link-active">Update</button>
+      <button class="btn btn-danger btn-lg m-5" [routerLink]="['/delete']"
+        routerLinkActive="router-link-active">Delete</button>
+    </div>
+    <div id="right-section" class="bg-success">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

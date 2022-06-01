@@ -31,7 +31,7 @@ spec:
       containers:
         - name: peer1-doctor
           image: hyperledger/fabric-peer:2.3.2
-          workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          workingDir: /opt/javapath/src/github.com/hyperledger/fabric/peer
           command: ["peer"]
           args: ["node","start"]
           env:

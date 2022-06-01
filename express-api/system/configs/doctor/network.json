@@ -1,0 +1,53 @@
+{
+  "name": "first-network",
+  "version": "1.1",
+  "channels": {
+    "mainchannel": {
+      "orderers": ["orderer0"],
+      "peers": ["peer0-doctor"],
+      "connection": {
+        "timeout": {
+          "peer": {
+            "endorser": "6000",
+            "eventHub": "6000",
+            "eventReg": "6000"
+          }
+        }
+      }
+    }
+  },
+  "organizations": {
+    "doctor": {
+      "mspid": "doctor",
+      "adminPrivateKey": {
+        "path": "/tmp/crypto/peerOrganizations/doctor/users/Admin@doctor/msp/keystore/pvt-cert.pem"
+      },
+      "peers": ["peer0-doctor"],
+      "signedCert": {
+        "path": "/tmp/crypto/peerOrganizations/doctor/users/Admin@doctor/msp/signcerts/Admin@doctor-cert.pem"
+      }
+    }
+  },
+  "orderers": {
+    "orderer0": {
+      "url": "grpcs://orderer0-service:7050",
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer0"
+      },
+      "tlsCACerts": {
+        "path": "/tmp/crypto/ordererOrganizations/orderer/orderers/orderer0/msp/tlscacerts/tlsca.orderer-cert.pem"
+      }
+    }
+  },
+  "peers": {
+    "peer0-doctor": {
+      "url": "grpcs://peer0-doctor-service:7051",
+      "tlsCACerts": {
+        "path": "/tmp/crypto/peerOrganizations/doctor/peers/peer0-doctor/tls/ca.crt"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0-doctor"
+      }
+    }
+  }
+}

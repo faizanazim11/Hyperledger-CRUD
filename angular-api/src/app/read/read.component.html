@@ -1,0 +1,41 @@
+<div id="read-div" class="bg-primary">
+  <div id="inner">
+    <div id="input-id">
+      <mdb-form-control class="form-white m-2">
+        <input mdbInput type="number" id="patientId" class="form-control form-control-lg" />
+        <label mdbLabel class="form-label" for="patientId">Patient Id</label>
+      </mdb-form-control>
+      <button class="btn btn-light my-4" (click)="read()">Read Patient Data</button>
+    </div>
+    <div id="output-table" class="m-2 mt-5">
+      <table class="table table-light">
+        <tbody>
+          <tr>
+            <th scope="row">First Name</th>
+            <td id="firstName"></td>
+          </tr>
+          <tr>
+            <th scope="row">Middle Name</th>
+            <td id="middleName"></td>
+          </tr>
+          <tr>
+            <th scope="row">Last Name</th>
+            <td id="lastName"></td>
+          </tr>
+          <tr>
+            <th scope="row">Age</th>
+            <td id="age"></td>
+          </tr>
+          <tr>
+            <th scope="row">Gender</th>
+            <td id="gender"></td>
+          </tr>
+          <tr>
+            <th scope="row">Condition</th>
+            <td id="condition"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

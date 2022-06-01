@@ -21,7 +21,7 @@ spec:
             claimName: my-pv-claim
       containers:
         - name: api
-          image: faizanazim11/udemy-node-api:latest
+          image: faizanazim11/hlf-express-api:latest
           env:
             - name: ENV
               value: prod

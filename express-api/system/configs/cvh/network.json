@@ -1,0 +1,53 @@
+{
+  "name": "first-network",
+  "version": "1.1",
+  "channels": {
+    "mainchannel": {
+      "orderers": ["orderer0"],
+      "peers": ["peer0-cvh"],
+      "connection": {
+        "timeout": {
+          "peer": {
+            "endorser": "6000",
+            "eventHub": "6000",
+            "eventReg": "6000"
+          }
+        }
+      }
+    }
+  },
+  "organizations": {
+    "cvh": {
+      "mspid": "cvh",
+      "adminPrivateKey": {
+        "path": "/tmp/crypto/peerOrganizations/cvh/users/Admin@cvh/msp/keystore/pvt-cert.pem"
+      },
+      "peers": ["peer0-cvh"],
+      "signedCert": {
+        "path": "/tmp/crypto/peerOrganizations/cvh/users/Admin@cvh/msp/signcerts/Admin@cvh-cert.pem"
+      }
+    }
+  },
+  "orderers": {
+    "orderer0": {
+      "url": "grpcs://orderer0-service:7050",
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer0"
+      },
+      "tlsCACerts": {
+        "path": "/tmp/crypto/ordererOrganizations/orderer/orderers/orderer0/msp/tlscacerts/tlsca.orderer-cert.pem"
+      }
+    }
+  },
+  "peers": {
+    "peer0-cvh": {
+      "url": "grpcs://peer0-cvh-service:7051",
+      "tlsCACerts": {
+        "path": "/tmp/crypto/peerOrganizations/cvh/peers/peer0-cvh/tls/ca.crt"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0-cvh"
+      }
+    }
+  }
+}

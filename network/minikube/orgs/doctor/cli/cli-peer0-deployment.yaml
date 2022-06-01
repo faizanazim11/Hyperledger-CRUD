@@ -28,12 +28,12 @@ spec:
       containers:
         - name: peer0-doctor
           image: hyperledger/fabric-tools:2.3.2
-          workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          workingDir: /opt/javapath/src/github.com/hyperledger/fabric/peer
           command: ["sleep"]
           args: ["infinity"]
           env:
             - name: GOPATH
-              value: /opt/gopath
+              value: /opt/javapath
             - name: CORE_PEER_ADDRESSAUTODETECT
               value: "true"
             - name: CORE_PEER_ID
@@ -53,16 +53,19 @@ spec:
             - name: CORE_PEER_TLS_ROOTCERT_FILE
               value: /etc/hyperledger/fabric/tls/ca.crt
           volumeMounts:
-            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/orderer
+            - mountPath: /opt/javapath/src/github.com/hyperledger/fabric/peer/orderer
               name: my-pv-storage
               subPath: files/orderer
-            - mountPath: /opt/gopath/src/resources
+            # - mountPath: /opt/javapath/src/resources
+            #   name: my-pv-storage
+            #   subPath: files/chaincode/resources
+            # - mountPath: /opt/javapath/src/resource_types
+            #   name: my-pv-storage
+            #   subPath: files/chaincode/resource_types
+            - mountPath: /opt/javapath/src/patient
               name: my-pv-storage
-              subPath: files/chaincode/resources
-            - mountPath: /opt/gopath/src/resource_types
-              name: my-pv-storage
-              subPath: files/chaincode/resource_types
-            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channels
+              subPath: files/chaincode/patient
+            - mountPath: /opt/javapath/src/github.com/hyperledger/fabric/peer/channels
               name: my-pv-storage
               subPath: files/channels
             - mountPath: /etc/hyperledger/fabric/msp
