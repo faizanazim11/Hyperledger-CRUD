@@ -1,3 +1,4 @@
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n patient -c '\''{"Args":["createPatient", "1", "Syama", "Sundar", "Patra", "22", "Male", "Stable"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-sleep 5
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n patient -c '\''{"Args":["readPatient", "1"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package patient.tar.gz --path /opt/javapath/src/patient --lang java --label patient_1'
+kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package patient.tar.gz --path /opt/javapath/src/patient --lang java --label patient_1'
+kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package patient.tar.gz --path /opt/javapath/src/patient --lang java --label patient_1'
+kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package patient.tar.gz --path /opt/javapath/src/patient --lang java --label patient_1'

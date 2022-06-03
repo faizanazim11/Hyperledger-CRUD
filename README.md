@@ -36,8 +36,6 @@ kubectl cp ./scripts $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}
 kubectl cp ./network/minikube/configtx.yaml $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files
 kubectl cp ./network/minikube/config.yaml $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files
 kubectl cp ./chaincode/patient $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files/chaincode
-kubectl cp ./chaincode/resources $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files/chaincode
-kubectl cp ./chaincode/resource_types $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files/chaincode
 kubectl cp ./fabric-samples/bin $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files
 ```
 
@@ -167,81 +165,15 @@ kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment |
 
 
 
-```bash
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resource_types.tar.gz --path /opt/javapath/src/resource_types --lang javalang --label resource_types_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resource_types.tar.gz --path /opt/javapath/src/resource_types --lang javalang --label resource_types_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resource_types.tar.gz --path /opt/javapath/src/resource_types --lang javalang --label resource_types_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resource_types.tar.gz --path /opt/javapath/src/resource_types --lang javalang --label resource_types_1'
 
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resource_types.tar.gz &> pkg.txt'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resource_types.tar.gz'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resource_types.tar.gz &> pkg.txt'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resource_types.tar.gz'
 
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode approveformyorg -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/javapath/src/resource_types/collections-config.json --name resource_types --version 1.0 --sequence 1 --package-id $(tail -n 1 pkg.txt | awk '\''NF>1{print $NF}'\'')'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode approveformyorg -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --collections-config /opt/javapath/src/resource_types/collections-config.json --channelID mainchannel --name resource_types --version 1.0 --sequence 1 --package-id $(tail -n 1 pkg.txt | awk '\''NF>1{print $NF}'\'')'
 
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode commit -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/javapath/src/resource_types/collections-config.json --name resource_types --version 1.0 --sequence 1'
+Start the Backend
 ```
-
-Lets go ahead and test this chaincode
-```bash
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resource_types -c '\''{"Args":["Create", "1","Parts"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-sleep 5
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resource_types -c '\''{"Args":["Index"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-```
-
-Lets try the other chaincode
-```bash
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resources.tar.gz --path /opt/javapath/src/resources --lang javalang --label resources_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resources.tar.gz --path /opt/javapath/src/resources --lang javalang --label resources_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resources.tar.gz --path /opt/javapath/src/resources --lang javalang --label resources_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resources.tar.gz --path /opt/javapath/src/resources --lang javalang --label resources_1'
-
-
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resources.tar.gz &> pkg.txt'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resources.tar.gz'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resources.tar.gz &> pkg.txt'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resources.tar.gz'
-
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode approveformyorg -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/javapath/src/resources/collections-config.json --name resources --version 1.0 --sequence 1 --package-id $(tail -n 1 pkg.txt | awk '\''NF>1{print $NF}'\'')'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode approveformyorg -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/javapath/src/resources/collections-config.json --name resources --version 1.0 --sequence 1 --package-id $(tail -n 1 pkg.txt | awk '\''NF>1{print $NF}'\'')'
-
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode commit -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/javapath/src/resources/collections-config.json --name resources --version 1.0 --sequence 1'
-
-sleep 5
-
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["Create","","CPUs","1"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["Create","","Database Servers","1"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["Create","","Mainframe Boards","1"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-sleep 5
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["Index"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["Index"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["Index"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["Index"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
-```
-
-Start the API
-```bash
 kubectl apply -f network/minikube/backend
 ```
 
-Get the address for the nodeport
-```bash
-minikube service api-service-nodeport --url
+Start the Frontend
 ```
-
-## How to delete everything
-```bash
-kubectl delete -f network/minikube/backend
-kubectl delete -f network/minikube/orgs/doctor/couchdb 
-kubectl delete -f network/minikube/orgs/cvh/couchdb
-
-kubectl delete -f network/minikube/orgs/doctor/
-kubectl delete -f network/minikube/orgs/cvh/
-
-kubectl delete -f network/minikube/orgs/doctor/cli
-kubectl delete -f network/minikube/orgs/cvh/cli
-kubectl delete -f network/minikube/cas
-kubectl delete -f network/minikube/orderers
+kubectl apply -f network/minikube/frontend
 ```
