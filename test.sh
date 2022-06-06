@@ -1,4 +1,0 @@
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package patient.tar.gz --path /opt/javapath/src/patient --lang java --label patient_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-doctor-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package patient.tar.gz --path /opt/javapath/src/patient --lang java --label patient_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package patient.tar.gz --path /opt/javapath/src/patient --lang java --label patient_1'
-kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-cvh-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package patient.tar.gz --path /opt/javapath/src/patient --lang java --label patient_1'
